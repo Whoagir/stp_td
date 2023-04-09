@@ -16,8 +16,9 @@ def distance(a, b):
 
 
 class Grid(object):
-    def __init__(self):
+    def __init__(self, start_position):
         self.grid = []
+        self.pos = start_position
 
     def generate_rect(self, width: int, height: int):
         self.clear()
@@ -43,14 +44,13 @@ class Grid(object):
     def event_andler(self, event):
         pass
 
-    def render(self, surface: Surface, center_rect):
+    def render(self, surface: Surface):
         for hex in self.grid:
             center = self.search_local_center_cord_xy(hex)
-
             for i in range(6):
                 point_cord = self.search_global_cord_all_point(center, i)
                 pygame.draw.line(surface, COLOR_BORDER_GRID,
-                                 point_cord,
+                                 point_cord[0], point_cord[1],
                                  BORDER_RADIUS)
 
     def search_local_center_cord_xy(self, cord_xyz):
@@ -58,14 +58,12 @@ class Grid(object):
         b = 3 ** (1 / 2)
         rv = a * b
         alfa = math.pi / 3
-        cord_xy = cord_xyz[0] * rv + cord_xyz[1] * rv * math.cos(alfa) + cord_xyz[2] * rv * math.cos(alfa * 2), \
-                  0 - cord_xyz[1] * rv * math.sin(alfa) - cord_xyz[2] * rv * math.sin(alfa * 2)
+        cord_xy = self.pos[0] + cord_xyz[0] * rv + cord_xyz[1] * rv * math.cos(alfa) + cord_xyz[2] * rv * math.cos(alfa * 2), \
+                  self.pos[1] - cord_xyz[1] * rv * math.sin(alfa) - cord_xyz[2] * rv * math.sin(alfa * 2)
         return cord_xy
 
     def search_global_cord_all_point(self, center_xy, iterable):
         a = HEX_SIZE
-        b = 3 ** (1 / 2)
-        rv = a * b
         alfa = math.pi / 3
         array_cord_point = (center_xy[0] + a * math.cos(iterable * alfa + alfa / 2),
                             center_xy[1] + a * math.sin(iterable * alfa + alfa / 2)), \
