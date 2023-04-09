@@ -1,0 +1,20 @@
+FPS = 30
+# Устанавливаем размеры окна
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 800
+# Цвета
+BLACK = (0, 0, 0)
+WHITE = (110, 110, 110)
+WHITE_T = (255, 255, 255)
+WHITE_T2 = (0, 255, 255)
+WHITE_T3 = (0, 255, 0) # G
+WHITE_T4 = (0, 0, 255) # B
+VIOLET = (148, 0, 211)
+RED = (180, 0, 0)
+CHECK_POINT_ENEMY_COLOR = (70, 70, 70)
+WALL_COLOR = (24, 99, 24)
+COLOR = [(255, 0, 0), (0, 0, 255), (255, 255, 255)]
+# Размеры гексагона
+HEX_SIZE = 20
+BORDER_RADIUS = 3
+COLOR_BORDER_GRID = (110, 110, 110)
