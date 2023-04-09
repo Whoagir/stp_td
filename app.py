@@ -28,8 +28,7 @@ class Game:
 
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
 
-        self.center_point_grid = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2)
-        self.grid = Grid()
+        self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
         self.grid.generate_bhex(7)
 
     def main_loop(self):
@@ -59,7 +58,7 @@ class Game:
                     handler(event.type, event.pos)
 
     def render(self):
-        self.grid.render(self.screen, self.center_point_grid)
+        self.grid.render(self.screen)
         for obj in self.objects:
             obj.render(self.screen)
         pygame.display.flip()
