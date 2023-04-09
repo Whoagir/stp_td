@@ -1,4 +1,5 @@
 FPS = 30
+GAME_TITLE = 'Game'
 # Устанавливаем размеры окна
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
