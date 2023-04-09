@@ -1,3 +1,5 @@
+import pygame
+pygame.font.init()
 FPS = 30
 GAME_TITLE = 'Game'
 # Устанавливаем размеры окна
@@ -19,3 +21,8 @@ COLOR = [(255, 0, 0), (0, 0, 255), (255, 255, 255)]
 HEX_SIZE = 20
 BORDER_RADIUS = 3
 COLOR_BORDER_GRID = (110, 110, 110)
+# шрифты
+menu_font_weight = 20
+menu_hover_font_weight = 25
+menu_font = pygame.font.Font(None, menu_font_weight)
+menu_hover_font = pygame.font.Font(None, menu_hover_font_weight)

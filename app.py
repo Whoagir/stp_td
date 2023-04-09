@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from constant import *
 from hex_grid import Grid
+from menu import Button, Menu
 
 
 class Game:
@@ -30,6 +31,7 @@ class Game:
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
         self.grid.generate_bhex(7)
+
 
     def main_loop(self):
         while self.running:
