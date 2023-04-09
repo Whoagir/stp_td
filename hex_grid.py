@@ -15,39 +15,16 @@ def distance(a, b):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** (1 / 2)
 
 
-class Grid(object):
-    def __init__(self, start_position):
-        self.grid = []
-        self.pos = start_position
+class Hex:
+    def __init__(self, pos):
+        self.object = None
+        self.pos = pos
 
-    def generate_rect(self, width: int, height: int):
-        self.clear()
-        for x in range(width):
-            y = 0
-            z = 0
-            p = 0
-            while abs(y) < height:
-                self.grid.append([x, y, z])
-                if p:
-                    y -= 1
-                else:
-                    z -= 1
-                p = not p
+    def render(self, surface, position):
+        self.draw_hex_border(surface, position)
 
-    def generate_bhex(self, size: int):
-        self.clear()
-        for x in range(-size, size):
-            for y in range(-size, size):
-                for z in range(-size, size):
-                    self.grid.append([x, y, z])
-
-    def event_andler(self, event):
+    def update(self):
         pass
-
-    def render(self, surface: Surface):
-        for hex in self.grid:
-            center = self.get_global_hex_position(hex)
-            self.draw_hex_border(surface, center)
 
     def draw_hex_border(self, surface, hex_center):
         for i in range(6):
@@ -65,13 +42,46 @@ class Grid(object):
                             hex_center[1] + a * math.sin((1 + num) * alfa + alfa / 2))
         return array_cord_point
 
-    def get_global_hex_position(self, cord_xyz):
+
+class Grid(object):
+    def __init__(self, start_position):
+        self.grid = []
+        self.pos = start_position
+
+    def generate_rect(self, width: int, height: int):
+        self.clear()
+        for x in range(width):
+            y, z, p = 0, 0, 0
+            while abs(y) < height:
+                self.grid.append(Hex(pos=(x, y, z)))
+                if p:
+                    y -= 1
+                else:
+                    z -= 1
+                p = not p
+
+    def generate_bhex(self, size: int):
+        self.clear()
+        for x in range(-size, size):
+            for y in range(-size, size):
+                for z in range(-size, size):
+                    self.grid.append(Hex(pos=(x, y, z)))
+
+    def handle_events(self, event):
+        pass
+
+    def render(self, surface: Surface):
+        for hex in self.grid:
+            center = self.get_global_hex_position(hex)
+            hex.render(surface, center)
+
+    def get_global_hex_position(self, hex):
         a = HEX_SIZE
         b = 3 ** (1 / 2)
         rv = a * b
         alfa = math.pi / 3
-        cord_xy = self.pos[0] + cord_xyz[0] * rv + cord_xyz[1] * rv * math.cos(alfa) + cord_xyz[2] * rv * math.cos(alfa * 2), \
-                  self.pos[1] - cord_xyz[1] * rv * math.sin(alfa) - cord_xyz[2] * rv * math.sin(alfa * 2)
+        cord_xy = self.pos[0] + hex.pos[0] * rv + hex.pos[1] * rv * math.cos(alfa) + hex.pos[2] * rv * math.cos(alfa * 2), \
+                  self.pos[1] - hex.pos[1] * rv * math.sin(alfa) - hex.pos[2] * rv * math.sin(alfa * 2)
         return cord_xy
 
     def clear(self):
