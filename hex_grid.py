@@ -43,28 +43,35 @@ class Grid(object):
     def event_andler(self, event):
         pass
 
-
-
     def render(self, surface: Surface, center_rect):
         for hex in self.grid:
-            a = HEX_SIZE
-            b = 3 ** (1 / 2)
-            rv = a * b
-            alfa = math.pi / 3
-            center = center_rect[0] + \
-                     hex[0] * rv + \
-                     hex[1] * rv * math.cos(alfa) + \
-                     hex[2] * rv * math.cos(alfa * 2), \
-                     center_rect[1] - \
-                     hex[1] * rv * math.sin(alfa) - \
-                     hex[2] * rv * math.sin(alfa * 2)
+            center = self.search_local_center_cord_xy(hex)
+
             for i in range(6):
+                point_cord = self.search_global_cord_all_point(center, i)
                 pygame.draw.line(surface, COLOR_BORDER_GRID,
-                                 (center[0] + a * math.cos(i * alfa + alfa / 2),
-                                  center[1] + a * math.sin(i * alfa + alfa / 2)),
-                                 (center[0] + a * math.cos((1 + i) * alfa + alfa / 2),
-                                  center[1] + a * math.sin((1 + i) * alfa + alfa / 2)),
+                                 point_cord,
                                  BORDER_RADIUS)
+
+    def search_local_center_cord_xy(self, cord_xyz):
+        a = HEX_SIZE
+        b = 3 ** (1 / 2)
+        rv = a * b
+        alfa = math.pi / 3
+        cord_xy = cord_xyz[0] * rv + cord_xyz[1] * rv * math.cos(alfa) + cord_xyz[2] * rv * math.cos(alfa * 2), \
+                  0 - cord_xyz[1] * rv * math.sin(alfa) - cord_xyz[2] * rv * math.sin(alfa * 2)
+        return cord_xy
+
+    def search_global_cord_all_point(self, center_xy, iterable):
+        a = HEX_SIZE
+        b = 3 ** (1 / 2)
+        rv = a * b
+        alfa = math.pi / 3
+        array_cord_point = (center_xy[0] + a * math.cos(iterable * alfa + alfa / 2),
+                            center_xy[1] + a * math.sin(iterable * alfa + alfa / 2)), \
+                           (center_xy[0] + a * math.cos((1 + iterable) * alfa + alfa / 2),
+                            center_xy[1] + a * math.sin((1 + iterable) * alfa + alfa / 2))
+        return array_cord_point
 
     def clear(self):
         self.grid = []
@@ -238,5 +245,3 @@ class Grid(object):
     #         graf_decstr[i] = array_friend
     #
     #     return graf_decstr
-
-
