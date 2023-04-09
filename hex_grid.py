@@ -43,8 +43,6 @@ class Grid(object):
     def event_andler(self, event):
         pass
 
-
-
     def render(self, surface: Surface, center_rect):
         for hex in self.grid:
             a = HEX_SIZE
