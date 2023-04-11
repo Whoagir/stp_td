@@ -30,11 +30,11 @@ class Game:
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
-        self.grid.generate_bhex(7)
+        self.grid.generate_bhex(2)
 
 
     def main_loop(self):
-        self.grid.wall_search(5)
+        self.grid.wall_search(4)
         while self.running:
             self.handle_events()
             self.update()

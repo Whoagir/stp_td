@@ -90,20 +90,19 @@ class Grid(object):
         b = 3 ** (1 / 2)
         rv = a * b
         alfa = math.pi / 3
-        cord_xy = self.pos[0] + hex.pos[0] * rv + hex.pos[1] * rv * math.cos(alfa) + hex.pos[2] * rv * math.cos(alfa * 2), \
+        cord_xy = self.pos[0] + hex.pos[0] * rv + hex.pos[1] * rv * math.cos(alfa) + hex.pos[2] * rv * math.cos(
+            alfa * 2), \
                   self.pos[1] - hex.pos[1] * rv * math.sin(alfa) - hex.pos[2] * rv * math.sin(alfa * 2)
         return cord_xy
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):
-            if sum(map(abs, self.grid[i].pos)) < radius:
+            if sum(map(abs, self.grid[i].pos)) > radius:
                 self.grid[i].object = 1
             else:
                 self.grid[i].object = 0
-                # self.grid[i].draw_object(surface)
-
+            print(self.grid[i].pos, self.grid[i].object, sum(map(abs, self.grid[i].pos)))
+            # self.grid[i].draw_object(surface)
 
     def clear(self):
         self.grid = []
-
-
