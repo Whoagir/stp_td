@@ -16,11 +16,32 @@ def distance(a, b):
 
 
 class Hex:
-    def __init__(self, pos):
+    def __init__(self, pos: Tuple[int, int, int]):
+        if pos[0] + pos[1] + pos[2] != 0:
+            raise Exception('Hex error x+y+z==0')
         self.object = None
-        self.pos = pos
+        self.x = pos[0]
+        self.y = pos[1]
+        self.z = pos[2]
+
+    @property
+    def pos(self):
+        return self.x, self.y, self.z
+
+    def __add__(self, other: 'Hex'):
+        return Hex((self.x + other.x, self.y + other.y, self.z + other.z))
+
+    def __sub__(self, other: 'Hex'):
+        return Hex((self.x - other.x, self.y - other.y, self.z - other.z))
+
+    def __mul__(self, other: int):
+        self.x *= other
+        self.y *= other
+        self.z *= other
+        return self
 
     def render(self, surface, position):
+        print(position)
         if self.object == 1:
             self.draw_object(surface, position)
         self.draw_hex_border(surface, position)
@@ -58,17 +79,29 @@ class Grid(object):
         self.grid = []
         self.pos = start_position
 
-    def generate_rect(self, width: int, height: int):
-        self.clear()
-        for x in range(width):
-            y, z, p = 0, 0, 0
-            while abs(y) < height:
-                self.grid.append(Hex(pos=(x, y, z)))
-                if p:
-                    y -= 1
-                else:
-                    z -= 1
-                p = not p
+    def generate_rect(self, size: int):
+        for r in range(size):
+            offset = r//2
+            for q in range(-offset, size-offset):
+                self.grid.append(Hex((q, r, -q-r)))
+
+    def generate_rect_flat_top(self, left: int, right:int, top: int, bottom: int):
+        for q in range(left, right):
+            q_offset = q//2
+            for r in range(top - q_offset, bottom - q_offset):
+                self.grid.append(Hex((q, r, -q-r)))
+
+    def generate_hex(self, size):
+        for q in range(-size, size):
+            r1 = max(-size, -q-size)
+            r2 = min(size, -q+size)
+            for r in range(r1, r2):
+                self.grid.append(Hex((q, r, -q-r)))
+
+    def generate_trinlge(self, size: int):
+        for q in range(size):
+            for r in range(size-q):
+                self.grid.append(Hex((q, r, -q-r)))
 
     def generate_bhex(self, size: int):
         self.clear()
@@ -89,14 +122,9 @@ class Grid(object):
             hex.render(surface, center)
 
     def get_global_hex_position(self, hex):
-        a = HEX_SIZE
-        b = 3 ** (1 / 2)
-        rv = a * b
-        alfa = math.pi / 3
-        cord_xy = self.pos[0] + hex.pos[0] * rv + hex.pos[1] * rv * math.cos(alfa) + hex.pos[2] * rv * math.cos(
-            alfa * 2), \
-                  self.pos[1] - hex.pos[1] * rv * math.sin(alfa) - hex.pos[2] * rv * math.sin(alfa * 2)
-        return cord_xy
+        x = self.pos[0] + (hex.x * 3**0.5 + hex.y * 3**0.5/2) * HEX_SIZE
+        y = self.pos[1] + (hex.x * 0 + hex.y * 3/2) * HEX_SIZE
+        return x, y
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):
