@@ -34,6 +34,7 @@ class Game:
 
 
     def main_loop(self):
+        self.grid.wall_search(5)
         while self.running:
             self.handle_events()
             self.update()
