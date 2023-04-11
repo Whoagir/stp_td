@@ -72,10 +72,13 @@ class Grid(object):
 
     def generate_bhex(self, size: int):
         self.clear()
+        pos_data = set()
         for x in range(-size, size):
             for y in range(-size, size):
                 for z in range(-size, size):
-                    self.grid.append(Hex(pos=(x, y, z)))
+                    pos_data.add((x, y, z))
+        for p in pos_data:
+            self.grid.append(Hex(pos=p))
 
     def handle_events(self, event):
         pass
