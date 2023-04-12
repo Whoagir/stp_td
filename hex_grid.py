@@ -41,7 +41,6 @@ class Hex:
         return self
 
     def render(self, surface, position):
-        print(position)
         if self.object == 1:
             self.draw_object(surface, position)
         self.draw_hex_border(surface, position)
@@ -70,7 +69,7 @@ class Hex:
 
     def draw_object(self, surface, position):
         a = sun_rect
-        cord = a.x + position[0], a.y + position[1]
+        cord = a.x + position[0] - (3 ** (1/2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
         surface.blit(sun_surf, cord)
 
 
@@ -92,10 +91,10 @@ class Grid(object):
                 self.grid.append(Hex((q, r, -q-r)))
 
     def generate_hex(self, size):
-        for q in range(-size, size):
+        for q in range(-size, size + 1):
             r1 = max(-size, -q-size)
             r2 = min(size, -q+size)
-            for r in range(r1, r2):
+            for r in range(r1, r2 + 1):
                 self.grid.append(Hex((q, r, -q-r)))
 
     def generate_trinlge(self, size: int):
@@ -130,10 +129,6 @@ class Grid(object):
         for i in range(len(self.grid)):
             if sum(map(abs, self.grid[i].pos)) > radius:
                 self.grid[i].object = 1
-            else:
-                self.grid[i].object = 0
-            print(self.grid[i].pos, self.grid[i].object, sum(map(abs, self.grid[i].pos)))
-            # self.grid[i].draw_object(surface)
 
     def clear(self):
         self.grid = []
