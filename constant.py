@@ -27,6 +27,8 @@ menu_hover_font_weight = 25
 menu_font = pygame.font.Font(None, menu_font_weight)
 menu_hover_font = pygame.font.Font(None, menu_hover_font_weight)
 # картинки
-sun_surf = pygame.image.load('floor_.png')
-sun_surf = pygame.transform.scale(sun_surf, (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
-sun_rect = sun_surf.get_rect()
+sun_surf = []
+for i in range(5):
+    sun_surf.append(pygame.image.load('floor' + str(i+1) + '.png'))
+    sun_surf[i] = pygame.transform.scale(sun_surf[i], (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
+sun_rect = sun_surf[0].get_rect()

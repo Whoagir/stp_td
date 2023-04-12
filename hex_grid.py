@@ -1,4 +1,5 @@
 import math
+import random
 import pygame
 from pygame import Surface, Rect
 from typing import Tuple
@@ -69,8 +70,8 @@ class Hex:
 
     def draw_object(self, surface, position):
         a = sun_rect
-        cord = a.x + position[0] - (3 ** (1/2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
-        surface.blit(sun_surf, cord)
+        cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
+        surface.blit(sun_surf[random.randint(1, 4)], cord)
 
 
 class Grid(object):
@@ -80,27 +81,27 @@ class Grid(object):
 
     def generate_rect(self, size: int):
         for r in range(size):
-            offset = r//2
-            for q in range(-offset, size-offset):
-                self.grid.append(Hex((q, r, -q-r)))
+            offset = r // 2
+            for q in range(-offset, size - offset):
+                self.grid.append(Hex((q, r, -q - r)))
 
-    def generate_rect_flat_top(self, left: int, right:int, top: int, bottom: int):
+    def generate_rect_flat_top(self, left: int, right: int, top: int, bottom: int):
         for q in range(left, right):
-            q_offset = q//2
+            q_offset = q // 2
             for r in range(top - q_offset, bottom - q_offset):
-                self.grid.append(Hex((q, r, -q-r)))
+                self.grid.append(Hex((q, r, -q - r)))
 
     def generate_hex(self, size):
         for q in range(-size, size + 1):
-            r1 = max(-size, -q-size)
-            r2 = min(size, -q+size)
+            r1 = max(-size, -q - size)
+            r2 = min(size, -q + size)
             for r in range(r1, r2 + 1):
-                self.grid.append(Hex((q, r, -q-r)))
+                self.grid.append(Hex((q, r, -q - r)))
 
     def generate_trinlge(self, size: int):
         for q in range(size):
-            for r in range(size-q):
-                self.grid.append(Hex((q, r, -q-r)))
+            for r in range(size - q):
+                self.grid.append(Hex((q, r, -q - r)))
 
     def generate_bhex(self, size: int):
         self.clear()
@@ -121,8 +122,8 @@ class Grid(object):
             hex.render(surface, center)
 
     def get_global_hex_position(self, hex):
-        x = self.pos[0] + (hex.x * 3**0.5 + hex.y * 3**0.5/2) * HEX_SIZE
-        y = self.pos[1] + (hex.x * 0 + hex.y * 3/2) * HEX_SIZE
+        x = self.pos[0] + (hex.x * 3 ** 0.5 + hex.y * 3 ** 0.5 / 2) * HEX_SIZE
+        y = self.pos[1] + (hex.x * 0 + hex.y * 3 / 2) * HEX_SIZE
         return x, y
 
     def wall_search(self, radius):
