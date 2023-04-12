@@ -7,7 +7,7 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 790
 # Цвета
 BLACK = (0, 0, 0)
-WHITE = (20, 20, 20)
+WHITE = (2, 2, 2)
 WHITE_T = (255, 255, 255)
 WHITE_T2 = (0, 255, 255)
 WHITE_T3 = (0, 255, 0) # G
@@ -20,7 +20,7 @@ COLOR = [(255, 0, 0), (0, 0, 255), (255, 255, 255)]
 # Размеры гексагона
 HEX_SIZE = 20
 BORDER_RADIUS = 2
-COLOR_BORDER_GRID = (110, 110, 110)
+COLOR_BORDER_GRID = (40, 40, 40)
 # шрифты
 menu_font_weight = 20
 menu_hover_font_weight = 25

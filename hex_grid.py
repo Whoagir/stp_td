@@ -41,9 +41,9 @@ class Hex:
         self.z *= other
         return self
 
-    def render(self, surface, position):
+    def render(self, surface, position, dt):
         if self.object == 1:
-            self.draw_object(surface, position)
+            self.draw_object(surface, position, dt)
         self.draw_hex_border(surface, position)
 
     def update(self):
@@ -68,10 +68,11 @@ class Hex:
     def draw_floor(self):
         pass
 
-    def draw_object(self, surface, position):
+    def draw_object(self, surface, position, dt):
         a = sun_rect
         cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
-        surface.blit(sun_surf[random.randint(1, 4)], cord)
+        if dt % random.randint(15, 30) == 0:
+            surface.blit(sun_surf[random.randint(1, 4)], cord)
 
 
 class Grid(object):
@@ -116,15 +117,18 @@ class Grid(object):
     def handle_events(self, event):
         pass
 
-    def render(self, surface: Surface):
+    def render(self, surface: Surface, dt):
         for hex in self.grid:
             center = self.get_global_hex_position(hex)
-            hex.render(surface, center)
+            hex.render(surface, center, dt)
 
     def get_global_hex_position(self, hex):
         x = self.pos[0] + (hex.x * 3 ** 0.5 + hex.y * 3 ** 0.5 / 2) * HEX_SIZE
         y = self.pos[1] + (hex.x * 0 + hex.y * 3 / 2) * HEX_SIZE
         return x, y
+
+    def get_local_hex_position(self, pos):
+        pass
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):

@@ -31,6 +31,7 @@ class Game:
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
         self.grid.generate_hex(30)
+        self.dt = 0
         # self.grid.generate_rect_flat_top(-5, 5, -5, 5)
 
     def main_loop(self):
@@ -57,13 +58,17 @@ class Game:
             if event.type in (pygame.MOUSEBUTTONDOWN,
                               pygame.MOUSEBUTTONUP,
                               pygame.MOUSEMOTION):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    pos = pygame.mouse.get_pos()
+                    self.click(pos)
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
     def render(self):
-        self.grid.render(self.screen)
+        self.grid.render(self.screen, self.dt)
         for obj in self.objects:
             obj.render(self.screen)
+        self.dt += 1
         pygame.display.flip()
 
     def update(self):
@@ -74,6 +79,14 @@ class Game:
         self.running = False
         pygame.quit()
         sys.exit(-1)
+
+    def click(self, position):
+        flag = self.seach_long(position)
+        if flag != None:
+            pass
+
+    def seach_long(self, point):  # возвращает ближайший гексагон (номер) к point
+        pass
 
 
 if __name__ == '__main__':
