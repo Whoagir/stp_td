@@ -32,10 +32,9 @@ class Game:
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
-        self.grid.generate_hex(5)
+        self.grid.generate_hex(30)
         self.keydown_handlers.update(self.grid.keydown_handlers)
         self.mouse_handlers.extend(self.grid.mouse_handlers)
-        # self.grid.generate_rect_flat_top(-5, 5, -5, 5)
 
     def main_loop(self):
         self.grid.wall_search(25)
@@ -61,9 +60,6 @@ class Game:
             if event.type in (pygame.MOUSEBUTTONDOWN,
                               pygame.MOUSEBUTTONUP,
                               pygame.MOUSEMOTION):
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    pos = pygame.mouse.get_pos()
-                    self.click(pos)
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
@@ -82,14 +78,6 @@ class Game:
         self.running = False
         pygame.quit()
         sys.exit(-1)
-
-    def click(self, position):
-        flag = self.seach_long(position)
-        if flag != None:
-            pass
-
-    def seach_long(self, point):  # возвращает ближайший гексагон (номер) к point
-        pass
 
 
 if __name__ == '__main__':
