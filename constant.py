@@ -21,6 +21,7 @@ COLOR = [(255, 0, 0), (0, 0, 255), (255, 255, 255)]
 HEX_SIZE = 20
 BORDER_RADIUS = 2
 COLOR_BORDER_GRID = (40, 40, 40)
+COLOR_BORDER_GRID_HIGHTLIGHT = (255, 0, 0)
 # шрифты
 menu_font_weight = 20
 menu_hover_font_weight = 25

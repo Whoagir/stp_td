@@ -1,19 +1,12 @@
 import math
 import random
-import pygame
+from collections import defaultdict
+from typing import Optional
 from pygame import Surface, Rect
 from typing import Tuple
 
 from constant import *
 from vector import *
-
-
-def delete_duplicate(seq: list):
-    return list(set(seq))
-
-
-def distance(a, b):
-    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** (1 / 2)
 
 
 class Hex:
@@ -41,19 +34,24 @@ class Hex:
         self.z *= other
         return self
 
-    def render(self, surface, position, dt):
+    def __str__(self):
+        return 'Hex' + str(self.pos)
+
+    def render(self, surface, position, dt, highlight=False):
         if self.object == 1:
             self.draw_object(surface, position, dt)
-        self.draw_hex_border(surface, position)
+        self.draw_hex_border(surface, position, highlight=highlight)
 
     def update(self):
         pass
 
-    def draw_hex_border(self, surface, hex_center):
+    def draw_hex_border(self, surface, hex_center, highlight=False):
         for i in range(6):
             point_cord = self.get_hex_side(hex_center, i)
-            pygame.draw.line(surface, COLOR_BORDER_GRID,
-                             point_cord[0], point_cord[1],
+            pygame.draw.line(surface,
+                             COLOR_BORDER_GRID_HIGHTLIGHT if highlight else COLOR_BORDER_GRID,
+                             point_cord[0],
+                             point_cord[1],
                              BORDER_RADIUS)
 
     def get_hex_side(self, hex_center, num):
@@ -76,9 +74,19 @@ class Hex:
 
 
 class Grid(object):
-    def __init__(self, start_position):
+    def __init__(self, position):
         self.grid = []
-        self.pos = start_position
+        self.pos = position
+        self.current = None
+
+        self.keydown_handlers = defaultdict(list)
+        self.keydown_handlers[pygame.K_LEFT].append(self.move_left)
+        self.keydown_handlers[pygame.K_RIGHT].append(self.move_right)
+        self.keydown_handlers[pygame.K_UP].append(self.move_up)
+        self.keydown_handlers[pygame.K_DOWN].append(self.move_down)
+        self.keydown_handlers[pygame.K_SPACE].append(self.log_current_pos)
+
+        self.mouse_handlers = [self.mouse_click]
 
     def generate_rect(self, size: int):
         for r in range(size):
@@ -92,43 +100,77 @@ class Grid(object):
             for r in range(top - q_offset, bottom - q_offset):
                 self.grid.append(Hex((q, r, -q - r)))
 
+    def get_hex(self, local_pos: Tuple[int, int, int]) -> Optional['Hex']:
+        for h in self.grid:
+            if (h.x, h.y, h.z) == local_pos:
+                return h
+        return None
+
+    def set_current(self, local_pos: Tuple[int, int, int]):
+        self.current = self.get_hex(local_pos)
+        return self.current
+
+    def get_current(self) -> Optional['Hex']:
+        return self.current
+
     def generate_hex(self, size):
         for q in range(-size, size + 1):
             r1 = max(-size, -q - size)
             r2 = min(size, -q + size)
             for r in range(r1, r2 + 1):
                 self.grid.append(Hex((q, r, -q - r)))
+        self.current = self.grid[0]
 
     def generate_trinlge(self, size: int):
         for q in range(size):
             for r in range(size - q):
                 self.grid.append(Hex((q, r, -q - r)))
 
-    def generate_bhex(self, size: int):
-        self.clear()
-        pos_data = set()
-        for x in range(-size, size):
-            for y in range(-size, size):
-                for z in range(-size, size):
-                    pos_data.add((x, y, z))
-        for p in pos_data:
-            self.grid.append(Hex(pos=p))
+    def mouse_click(self, event_type, pos):
+        if event_type == pygame.MOUSEBUTTONDOWN:
+            print(pos, '~Hex =', self.global_to_local(pos))
+            self.current = self.global_to_local(pos)
 
-    def handle_events(self, event):
-        pass
+    def move_current(self, direction: Tuple[int, int, int]):
+        if not self.current:
+            return
+        self.current.x += direction[0]
+        self.current.y += direction[1]
+        self.current.z += direction[2]
+
+    def move_left(self, event_key):
+        self.move_current(direction=(-1, 0, 1))
+
+    def move_right(self, event_key):
+        self.move_current(direction=(1, 0, -1))
+
+    def move_up(self, event_key):
+        self.move_current(direction=(0, -1, 1))
+
+    def move_down(self, event_key):
+        self.move_current(direction=(0, 1, -1))
+
+    def log_current_pos(self, event_key):
+        print('local:', self.current, 'global:', self.local_to_global(self.current))
 
     def render(self, surface: Surface, dt):
-        for hex in self.grid:
-            center = self.get_global_hex_position(hex)
-            hex.render(surface, center, dt)
+        for h in self.grid:
+            center = self.local_to_global(h)
+            h.render(surface, center, dt)
+        if self.current:
+            self.current.render(surface, self.local_to_global(self.current), dt, highlight=True)
 
-    def get_global_hex_position(self, hex):
+    def local_to_global(self, hex) -> Tuple[float, float]:
         x = self.pos[0] + (hex.x * 3 ** 0.5 + hex.y * 3 ** 0.5 / 2) * HEX_SIZE
-        y = self.pos[1] + (hex.x * 0 + hex.y * 3 / 2) * HEX_SIZE
+        y = self.pos[1] + (hex.y * 3 / 2) * HEX_SIZE
         return x, y
 
-    def get_local_hex_position(self, pos):
-        pass
+    def global_to_local(self, pos: Tuple[float, float]) -> 'Hex':
+        pt = ((pos[0]-self.pos[0]) / HEX_SIZE, (pos[1]-self.pos[1]) / HEX_SIZE)
+        q = 3**0.5/3 * pt[0] - 1/3 * pt[1]
+        r = 2/3 * pt[1]
+        dirty_hex = self.get_hex(local_pos=(round(q), round(r), -round(q)-round(r)))
+        return dirty_hex
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):
@@ -137,3 +179,11 @@ class Grid(object):
 
     def clear(self):
         self.grid = []
+
+
+if __name__ == '__main__':
+    g = Grid(position=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
+    g.generate_hex(5)
+    g.global_to_local((466, 385))
+    g.global_to_local((501, 385))
+    g.global_to_local((536, 385))
