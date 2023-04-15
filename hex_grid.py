@@ -176,8 +176,7 @@ class Grid(object):
         pt = ((pos[0]-self.pos[0]) / HEX_SIZE, (pos[1]-self.pos[1]) / HEX_SIZE)
         q = 3**0.5/3 * pt[0] - 1/3 * pt[1]
         r = 2/3 * pt[1]
-        dirty_hex = self.get_hex(local_pos=(round(q), round(r), -round(q)-round(r)))
-        return dirty_hex
+        return self.get_hex(local_pos=(round(q), round(r), -round(q)-round(r)))
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):

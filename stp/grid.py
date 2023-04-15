@@ -1,4 +1,5 @@
 from enum import Enum
+from math import floor
 from typing import Tuple
 
 
@@ -11,9 +12,12 @@ def lerp(a: float, b: float, t: float):
 
 
 class HexagonGridTypes(Enum):
-    hex_flat_top = "Hex flat top"
-    hex_pointy_top = "Hex pointy top"
-    rect = "Rect"
+    flat_top = "Flat top"
+    pointy_top = "Pointy top"
+
+
+class HexPixelMatrix(Enum):
+    flat_top = ()
 
 
 class Hexagon:
@@ -63,11 +67,9 @@ class Hexagon:
 
 
 class HexagonGrid:
-    def __init__(self, grid_size: int, grid_type: HexagonGridTypes, hexagon_size: int, offset: Tuple[float, float] = (0, 0)):
-        self.offset = offset
+    def __init__(self, grid_size: int, grid_type: HexagonGridTypes):
         self.size = grid_size
         self.type = grid_type
-        self.hexagon_size = hexagon_size
         self._hexes = []
 
     def _generate_hex(self):
@@ -80,17 +82,16 @@ class HexagonGrid:
     def _generate_rect(self):
         pass
 
-    def local_to_global(self, hexagon: Hexagon):
-        pass
+    def local_to_global(self, hexagon: Hexagon, grid_offset: Tuple[float, float], hexagon_size: int) -> Tuple[float, float]:
+        x = grid_offset[0] + (hexagon.q * 3 ** 0.5 + hexagon.r * 3 ** 0.5 / 2) * hexagon_size
+        y = grid_offset[1] + (hexagon.r * 3 / 2) * hexagon_size
+        return x, y
 
-    def global_to_local(self, x: float, y: float):
-        pass
-
-    def lerp(self, a_hex: Hexagon, b_hex: Hexagon, t: float):
-        if t < 0:
-            t = 0
-        if t > 1:
-            t = 1
+    def global_to_local(self, x: float, y: float, grid_offset: Tuple[float, float], hexagon_size: int) -> Hexagon:
+        pt = ((x - grid_offset[0]) / hexagon_size, (y - grid_offset[1]) / hexagon_size)
+        q = 3 ** 0.5 / 3 * pt[0] - 1 / 3 * pt[1]
+        r = 2 / 3 * pt[1]
+        return Hexagon(round(q), round(r), -round(q)-round(r))
 
 
 if __name__ == '__main__':
