@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Tuple
 
 
 def lerp(a: float, b: float, t: float):
@@ -10,8 +11,9 @@ def lerp(a: float, b: float, t: float):
 
 
 class HexagonGridTypes(Enum):
-    flat_top: "Flat top"
-    pointy_top: "Pointy top"
+    hex_flat_top = "Hex flat top"
+    hex_pointy_top = "Hex pointy top"
+    rect = "Rect"
 
 
 class Hexagon:
@@ -61,10 +63,22 @@ class Hexagon:
 
 
 class HexagonGrid:
-    def __init__(self, grid_size: int, grid_type: HexagonGridTypes, hexagon_size: int):
+    def __init__(self, grid_size: int, grid_type: HexagonGridTypes, hexagon_size: int, offset: Tuple[float, float] = (0, 0)):
+        self.offset = offset
         self.size = grid_size
         self.type = grid_type
         self.hexagon_size = hexagon_size
+        self._hexes = []
+
+    def _generate_hex(self):
+        for q in range(-self.size, self.size + 1):
+            r1 = max(-self.size, -q - self.size)
+            r2 = min(self.size, -q + self.size)
+            for r in range(r1, r2 + 1):
+                self._hexes.append(Hexagon(q, r, -q - r))
+
+    def _generate_rect(self):
+        pass
 
     def local_to_global(self, hexagon: Hexagon):
         pass
@@ -77,7 +91,6 @@ class HexagonGrid:
             t = 0
         if t > 1:
             t = 1
-        return Hexagon()
 
 
 if __name__ == '__main__':

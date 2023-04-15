@@ -2,11 +2,10 @@ import math
 import random
 from collections import defaultdict
 from typing import Optional
-from pygame import Surface, Rect
+from pygame import Surface
 from typing import Tuple
 
 from config import *
-from vector import *
 
 
 class Hex:
@@ -123,7 +122,6 @@ class Grid(object):
             r2 = min(size, -q + size)
             for r in range(r1, r2 + 1):
                 self.grid.append(Hex((q, r, -q - r)))
-        self.current = self.grid[0]
 
     def generate_trinlge(self, size: int):
         for q in range(size):
@@ -192,8 +190,4 @@ class Grid(object):
 
 
 if __name__ == '__main__':
-    g = Grid(position=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
-    g.generate_hex(5)
-    g.global_to_local((466, 385))
-    g.global_to_local((501, 385))
-    g.global_to_local((536, 385))
+    pass

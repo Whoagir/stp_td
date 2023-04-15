@@ -4,7 +4,6 @@ from collections import defaultdict
 
 from config import *
 from hex_grid import Grid
-from menu import Button, Menu
 
 
 class Game:
