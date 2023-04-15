@@ -32,7 +32,7 @@ class Game:
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
-        self.grid.generate_hex(15)
+        self.grid.generate_hex(14)
         self.keydown_handlers.update(self.grid.keydown_handlers)
         self.mouse_handlers.extend(self.grid.mouse_handlers)
 
