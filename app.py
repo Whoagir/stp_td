@@ -2,7 +2,7 @@ import sys
 import pygame
 from collections import defaultdict
 
-from constant import *
+from config import *
 from hex_grid import Grid
 from menu import Button, Menu
 
@@ -32,12 +32,12 @@ class Game:
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
 
         self.grid = Grid((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2))
-        self.grid.generate_hex(30)
+        self.grid.generate_hex(15)
         self.keydown_handlers.update(self.grid.keydown_handlers)
         self.mouse_handlers.extend(self.grid.mouse_handlers)
 
     def main_loop(self):
-        self.grid.wall_search(25)
+        self.grid.wall_search(32)
         while self.running:
             self.handle_events()
             self.update()
@@ -61,9 +61,10 @@ class Game:
                               pygame.MOUSEBUTTONUP,
                               pygame.MOUSEMOTION):
                 for handler in self.mouse_handlers:
-                    handler(event.type, event.pos)
+                    handler(event, event.pos)
 
     def render(self):
+        self.screen.blit(back_surf,(0,0))
         self.grid.render(self.screen, self.dt)
         for obj in self.objects:
             obj.render(self.screen)

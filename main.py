@@ -1,7 +1,7 @@
 import pygame
 import esper
 
-from constant import *
+from config import *
 from hex_grid import *
 
 

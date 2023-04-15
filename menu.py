@@ -1,7 +1,7 @@
 import pygame as pg
 from collections import defaultdict
 
-from constant import menu_font, menu_hover_font, menu_hover_font_weight
+from config import menu_font, menu_hover_font, menu_hover_font_weight
 
 
 class Button(object):

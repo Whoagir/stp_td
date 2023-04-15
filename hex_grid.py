@@ -5,7 +5,7 @@ from typing import Optional
 from pygame import Surface, Rect
 from typing import Tuple
 
-from constant import *
+from config import *
 from vector import *
 
 
@@ -13,6 +13,7 @@ class Hex:
     def __init__(self, pos: Tuple[int, int, int]):
         if pos[0] + pos[1] + pos[2] != 0:
             raise Exception('Hex error x+y+z==0')
+        self.floor = None
         self.object = None
         self.x = pos[0]
         self.y = pos[1]
@@ -38,8 +39,9 @@ class Hex:
         return 'Hex' + str(self.pos)
 
     def render(self, surface, position, dt, highlight=False):
-        if self.object == 1:
-            self.draw_object(surface, position, dt)
+        if self.floor == FloorType.normal:
+            self.draw_floor(surface, position)
+            #self.draw_object(surface, position, dt)
         self.draw_hex_border(surface, position, highlight=highlight)
 
     def update(self):
@@ -63,8 +65,10 @@ class Hex:
                             hex_center[1] + a * math.sin((1 + num) * alfa + alfa / 2))
         return array_cord_point
 
-    def draw_floor(self):
-        pass
+    def draw_floor(self, surface, position):
+        a = floor_n_rect
+        cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
+        surface.blit(floor_n_surf, cord)
 
     def draw_object(self, surface, position, dt):
         a = sun_rect
@@ -126,10 +130,14 @@ class Grid(object):
             for r in range(size - q):
                 self.grid.append(Hex((q, r, -q - r)))
 
-    def mouse_click(self, event_type, pos):
-        if event_type == pygame.MOUSEBUTTONDOWN:
+    def mouse_click(self, event, pos):
+        if event.type == pygame.MOUSEBUTTONDOWN:
             print(pos, '~Hex =', self.global_to_local(pos))
             self.current = self.global_to_local(pos)
+            if event.button == 3:
+                self.current.floor = None
+            if event.button == 1:
+                self.current.floor = FloorType.normal
 
     def move_current(self, direction: Tuple[int, int, int]):
         if not self.current:
@@ -152,6 +160,7 @@ class Grid(object):
 
     def log_current_pos(self, event_key):
         print('local:', self.current, 'global:', self.local_to_global(self.current))
+        self.current.floor = None
 
     def render(self, surface: Surface, dt):
         for h in self.grid:
@@ -174,8 +183,9 @@ class Grid(object):
 
     def wall_search(self, radius):
         for i in range(len(self.grid)):
-            if sum(map(abs, self.grid[i].pos)) > radius:
-                self.grid[i].object = 1
+            if sum(map(abs, self.grid[i].pos)) < radius:
+                # self.grid[i].floor = FloorType.external
+                self.grid[i].floor = FloorType.normal
 
     def clear(self):
         self.grid = []

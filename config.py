@@ -1,4 +1,5 @@
 import pygame
+import enum
 pygame.font.init()
 FPS = 30
 GAME_TITLE = 'Game'
@@ -18,7 +19,7 @@ CHECK_POINT_ENEMY_COLOR = (70, 70, 70)
 WALL_COLOR = (24, 99, 24)
 COLOR = [(255, 0, 0), (0, 0, 255), (255, 255, 255)]
 # Размеры гексагона
-HEX_SIZE = 20
+HEX_SIZE = 16
 BORDER_RADIUS = 2
 COLOR_BORDER_GRID = (40, 40, 40)
 COLOR_BORDER_GRID_HIGHTLIGHT = (255, 0, 0)
@@ -33,3 +34,15 @@ for i in range(5):
     sun_surf.append(pygame.image.load('floor' + str(i+1) + '.png'))
     sun_surf[i] = pygame.transform.scale(sun_surf[i], (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
 sun_rect = sun_surf[0].get_rect()
+
+floor_n_surf = pygame.image.load('floor_normal.png')
+floor_n_surf = pygame.transform.scale(floor_n_surf, (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
+floor_n_rect = floor_n_surf.get_rect()
+# background
+back_surf = pygame.image.load('background.png')
+back_surf = pygame.transform.scale(back_surf, (SCREEN_WIDTH, SCREEN_HEIGHT))
+back_rect = back_surf.get_rect()
+# enum
+class FloorType(enum.Enum):
+    external = 1 # внешний пол
+    normal = 0 # обычный пол
