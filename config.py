@@ -31,15 +31,15 @@ menu_hover_font = pygame.font.Font(None, menu_hover_font_weight)
 # картинки
 sun_surf = []
 for i in range(5):
-    sun_surf.append(pygame.image.load('floor' + str(i+1) + '.png'))
+    sun_surf.append(pygame.image.load('media/floor' + str(i+1) + '.png'))
     sun_surf[i] = pygame.transform.scale(sun_surf[i], (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
 sun_rect = sun_surf[0].get_rect()
 
-floor_n_surf = pygame.image.load('floor_normal.png')
+floor_n_surf = pygame.image.load('media/floor_normal.png')
 floor_n_surf = pygame.transform.scale(floor_n_surf, (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
 floor_n_rect = floor_n_surf.get_rect()
 # background
-back_surf = pygame.image.load('background.png')
+back_surf = pygame.image.load('media/background.png')
 back_surf = pygame.transform.scale(back_surf, (SCREEN_WIDTH, SCREEN_HEIGHT))
 back_rect = back_surf.get_rect()
 # enum
