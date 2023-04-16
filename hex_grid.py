@@ -128,10 +128,9 @@ class Grid(object):
             for r in range(size - q):
                 self.grid.append(Hex((q, r, -q - r)))
 
-    def mouse_click(self, event, pos):
+    def mouse_click(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print(pos, '~Hex =', self.global_to_local(pos))
-            self.current = self.global_to_local(pos)
+            self.current = self.global_to_local(event.pos)
             if event.button == 3:
                 self.current.floor = None
             if event.button == 1:

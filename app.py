@@ -60,7 +60,7 @@ class Game:
                               pygame.MOUSEBUTTONUP,
                               pygame.MOUSEMOTION):
                 for handler in self.mouse_handlers:
-                    handler(event, event.pos)
+                    handler(event)
 
     def render(self):
         self.screen.blit(back_surf,(0,0))
