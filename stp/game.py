@@ -5,7 +5,7 @@ from typing import Tuple
 
 import config
 from towers import Tower
-from grid import HexagonGrid, HexagonGridTypes
+from stp.grid import HexagonGrid, HexagonGridTypes
 
 
 class CameraGroup(pygame.sprite.Group):
@@ -36,9 +36,9 @@ class CameraGroup(pygame.sprite.Group):
     def hide_grid(self):
         self._show_grid = False
 
-    def draw_grid_border(self, surface: pygame.Surface, hexagon_size: float):
+    def draw_grid_border(self, surface: pygame.Surface):
         for h in self._grid.hexes:
-            for edge in self._grid.get_hexagon_edges(h, hexagon_size):
+            for edge in self._grid.get_hexagon_edges(h, config.HEXAGON_SIZE):
                 pygame.draw.line(surface,
                                  config.GRID_COLOR,
                                  self._offset + edge[0],
@@ -50,10 +50,18 @@ class CameraGroup(pygame.sprite.Group):
         ground_pos = self.ground_rect.topleft + self._offset
         surface.blit(self.ground_surface, ground_pos)
         if self._show_grid:
-            self.draw_grid_border(surface, hexagon_size=config.HEXAGON_SIZE)
+            self.draw_grid_border(surface)
         for sprite in sorted(self.sprites(), key=lambda spr: spr.rect.centery):
             offset_pos = self._offset + sprite.rect.topleft
             surface.blit(sprite.image, offset_pos)
+
+
+class A:
+    def __init__(self):
+        pass
+
+    def __new__(cls, *args, **kwargs):
+        pass
 
 
 class Game:
@@ -73,7 +81,7 @@ class Game:
         self.right_menu = None
 
         self.camera_group = CameraGroup()
-        self.camera_group.set_offset((config.SCREEN_WIDTH/2, config.SCREEN_HEIGHT/2))
+        self.camera_group.set_offset((config.SCREEN_WIDTH / 2, config.SCREEN_HEIGHT / 2))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
@@ -81,6 +89,7 @@ class Game:
         self.mouse_handlers = []
 
         self.keydown_handlers[pygame.K_ESCAPE].append(self.quit)
+
         self.mouse_handlers.append(self.move_camera)
         self.mouse_handlers.append(self.set_tower)
         self.mouse_prev_pos = pygame.Vector2((0, 0))
@@ -101,8 +110,10 @@ class Game:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 t = Tower(self.camera_group)
-                grid_pos = self.grid.pixel_to_hex(event.pos, config.HEXAGON_SIZE)
-                t.rect.topleft = grid_pos - self.camera_group.offset
+                grid_pos = self.grid.hex_to_pixel(
+                    self.grid.pixel_to_hex(event.pos - self.camera_group.offset, config.HEXAGON_SIZE),
+                    config.HEXAGON_SIZE)
+                t.rect.center = (grid_pos[0], grid_pos[1])
 
     def move_camera(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -113,7 +124,7 @@ class Game:
                 self.camera_group.is_move = False
         if event.type == pygame.MOUSEMOTION:
             if self.camera_group.is_move:
-                self.camera_group.move(pygame.Vector2(event.pos)-self.mouse_prev_pos)
+                self.camera_group.move(pygame.Vector2(event.pos) - self.mouse_prev_pos)
         self.mouse_prev_pos = pygame.Vector2(event.pos)
 
     def handle_events(self):

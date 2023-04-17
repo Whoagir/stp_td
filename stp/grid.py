@@ -39,6 +39,14 @@ class Hexagon:
         self.r = r
         self.s = s
 
+    def __iter__(self):
+        return [self.q, self.r, self.s]
+
+    def __getitem__(self, key):
+        if not isinstance(key, int):
+            raise KeyError('Key can only be an int.')
+        return [self.q, self.r, self.s][key]
+
     def __add__(self, other: 'Hexagon') -> 'Hexagon':
         return Hexagon(self.q + other.q, self.r + other.r, self.s + other.s)
 
