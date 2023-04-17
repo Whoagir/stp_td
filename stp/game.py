@@ -101,7 +101,8 @@ class Game:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 t = Tower(self.camera_group)
-                t.rect.topleft = event.pos - self.camera_group.offset
+                grid_pos = self.grid.pixel_to_hex(event.pos, config.HEXAGON_SIZE)
+                t.rect.topleft = grid_pos - self.camera_group.offset
 
     def move_camera(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN:
