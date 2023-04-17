@@ -42,7 +42,24 @@ floor_n_rect = floor_n_surf.get_rect()
 back_surf = pygame.image.load('media/background.png')
 back_surf = pygame.transform.scale(back_surf, (SCREEN_WIDTH, SCREEN_HEIGHT))
 back_rect = back_surf.get_rect()
+# tower
+tower_surf_array = []
+for i in range(5):
+    tower_surf_array.append(pygame.image.load('media/floor' + str(i+1) + '.png'))
+    tower_surf_array[i] = pygame.transform.scale(tower_surf_array[i], (3 ** (1/2) * HEX_SIZE + 2, 2 * HEX_SIZE + 2))
+tower_rect_array = tower_surf_array[0].get_rect()
 # enum
 class FloorType(enum.Enum):
     external = 1 # внешний пол
     normal = 0 # обычный пол
+
+class TowerType(enum.Enum):
+    zircon = 1
+    aquamarine = 2
+    diamond = 3
+    citrin = 4
+    ruby = 5
+    topaz = 6
+    supphire = 7
+    peridof = 8
+    emerald = 9
