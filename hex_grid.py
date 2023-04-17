@@ -69,11 +69,10 @@ class Hex:
         cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
         surface.blit(floor_n_surf, cord)
 
-    def draw_object(self, surface, position, dt):
-        a = sun_rect
+    def draw_object(self, surface, position):
+        a =
         cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
-        if dt % random.randint(15, 30) == 0:
-            surface.blit(sun_surf[random.randint(1, 4)], cord)
+        surface.blit(, cord)
 
 
 class Grid(object):
