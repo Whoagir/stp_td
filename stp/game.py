@@ -5,7 +5,7 @@ from typing import Tuple
 
 import config
 from towers import Tower
-from stp.grid import HexagonGrid, HexagonGridTypes
+from grid import HexagonGrid, HexagonGridTypes
 
 
 class CameraGroup(pygame.sprite.Group):
