@@ -9,6 +9,16 @@ class PositionComponent:
 
 
 @component
-class RenderComponent:
-    image: Surface = None
-    rect: Rect = None
+class VelocityComponent:
+    x: float = 0.0
+    y: float = 0.0
+
+
+class SpriteComponent:
+    def __init__(self, image: Surface = Surface([0, 0])):
+        self.image = image
+
+
+@component
+class MouseClickComponent:
+    pass
