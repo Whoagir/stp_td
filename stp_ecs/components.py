@@ -1,4 +1,4 @@
-from pygame import Surface, Rect
+from pygame import Surface
 from dataclasses import dataclass as component
 
 
@@ -17,8 +17,3 @@ class VelocityComponent:
 class SpriteComponent:
     def __init__(self, image: Surface = Surface([0, 0])):
         self.image = image
-
-
-@component
-class MouseClickComponent:
-    pass

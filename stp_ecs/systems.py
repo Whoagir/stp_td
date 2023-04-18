@@ -22,9 +22,3 @@ class RenderProcessor(Processor):
             rect.topleft = (pos.x, pos.y)
             self.surface.blit(sprite.image, rect)
         pygame.display.flip()
-
-
-class OneFrameProcessor(Processor):
-    def process(self, *args, **kwargs):
-        for ent, (one_frame,) in self.world.get_components(MouseClickComponent):
-            self.world.remove_component(ent, one_frame)
