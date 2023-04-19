@@ -7,7 +7,7 @@ from systems import *
 from components import *
 from config import *
 from presets import player_preset
-from grid import HexagonGrid, Hexagon, HexagonGridTypes
+from grid import HexagonGrid, HexagonGridTypes
 
 
 class Game:
