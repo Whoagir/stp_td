@@ -13,7 +13,6 @@ def create_sprite_entity(world: World,
     world.add_component(entity, PositionComponent(x=pos[0], y=pos[1]))
     img = sprite_preset.image
     rect = sprite_preset.image.get_rect()
-    rect.topleft = sprite_preset.origin
     world.add_component(entity, SpriteComponent(image=img, rect=rect, origin=sprite_preset.origin))
     return entity
 

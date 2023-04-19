@@ -7,6 +7,7 @@ from systems import *
 from components import *
 from config import *
 from presets import player_preset
+from grid import HexagonGrid, Hexagon, HexagonGridTypes
 
 
 class Game:
@@ -32,6 +33,10 @@ class Game:
 
         player = create_sprite_entity(self.world, player_preset)
         self.world.add_component(player, VelocityComponent(x=2, y=1))
+
+        grid = HexagonGrid(HexagonGridTypes.pointy_top)
+        for h in grid.generate_hex(1):
+            create_sprite_entity(self.world, empty_floor_preset, pos=grid.hex_to_pixel(h, 32))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
