@@ -21,10 +21,14 @@ class Game:
         movement_processor = MovementProcessor()
         render_processor = RenderProcessor(self.surface)
         mouse_click_processor = MouseClickProcessor()
+        collide_processor = CollideProcessor()
+        collision_processor = CollisionProcessor()
 
         self.world.add_processor(movement_processor)
         self.world.add_processor(render_processor)
         self.world.add_processor(mouse_click_processor)
+        self.world.add_processor(collide_processor)
+        self.world.add_processor(collision_processor)
 
         player = create_sprite_entity(self.world, player_preset)
         self.world.add_component(player, VelocityComponent(x=2, y=1))

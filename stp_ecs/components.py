@@ -1,6 +1,7 @@
 from typing import Tuple
 from pygame import Surface, Rect
 from dataclasses import dataclass as component
+from dataclasses import field
 
 
 @component
@@ -15,14 +16,11 @@ class VelocityComponent:
     y: float = 0.0
 
 
+@component
 class SpriteComponent:
-    def __init__(self,
-                 image: Surface = Surface([0, 0]),
-                 rect: Rect = None,
-                 origin: Tuple[float, float] = (0, 0)):
-        self.image = image
-        self.rect = rect
-        self.origin = origin
+    image: Surface = field(default_factory=lambda _: Surface([0, 0]))
+    rect: Rect = None
+    origin: Tuple[float, float] = (0, 0)
 
 
 @component
