@@ -36,7 +36,7 @@ class Game:
 
         grid = HexagonGrid(HexagonGridTypes.pointy_top)
         for h in grid.generate_hex(6):
-            create_sprite_entity(self.world, empty_floor_preset, pos=grid.hex_to_pixel(h, 30))
+            create_sprite_entity(self.world, empty_floor_preset, pos=grid.hex_to_pixel(h, 32))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
