@@ -70,9 +70,10 @@ class Hex:
         surface.blit(floor_n_surf, cord)
 
     def draw_object(self, surface, position):
-        a =
-        cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
-        surface.blit(, cord)
+        # a =
+        # cord = a.x + position[0] - (3 ** (1 / 2) / 2) * HEX_SIZE, a.y + position[1] - HEX_SIZE
+        # surface.blit(, cord)
+        pass
 
 
 class Grid(object):

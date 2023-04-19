@@ -22,7 +22,7 @@ def main():
     center_point_grid = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - HEX_SIZE / 2)
 
     a = Grid(center_point_grid)
-    a.generate_bhex(7)
+    a.generate_hex(7)
     a.render(screen)
 
     pygame.display.flip()
