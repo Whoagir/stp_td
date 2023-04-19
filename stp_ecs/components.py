@@ -37,3 +37,8 @@ class CollisionComponent:
 class MouseClickComponent:
     x: float = 0.0
     y: float = 0.0
+
+
+@component
+class LayerComponent:
+    layer: int = 0

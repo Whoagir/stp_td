@@ -6,7 +6,7 @@ from presets import create_sprite_entity, empty_floor_preset
 
 
 class MovementProcessor(Processor):
-    def process(self, *args, **kwargs):
+    def process(self):
         for ent, (pos, vel) in self.world.get_components(PositionComponent, VelocityComponent):
             pos.x, pos.y = pygame.Vector2(pos.x, pos.y) + pygame.Vector2(vel.x, vel.y)
 
@@ -50,3 +50,11 @@ class MouseClickProcessor(Processor):
         for ent, (click,) in self.world.get_components(MouseClickComponent):
             self.world.remove_component(ent, MouseClickComponent)
             create_sprite_entity(self.world, empty_floor_preset, (click.x, click.y))
+
+
+class RenderWithLayerProcessor(Processor):
+    def process(self):
+        for ent, (layer, sprite, pos) in self.world.get_components(LayerComponent, SpriteComponent, PositionComponent):
+            for i in range(5):
+                if layer.layer == i:
+                    print('render sprite')
