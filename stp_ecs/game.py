@@ -5,6 +5,8 @@ import pygame
 
 from systems import *
 from components import *
+from config import *
+from presets import player_preset
 
 
 class Game:
@@ -18,16 +20,14 @@ class Game:
 
         movement_processor = MovementProcessor()
         render_processor = RenderProcessor(self.surface)
+        mouse_click_processor = MouseClickProcessor()
 
         self.world.add_processor(movement_processor)
         self.world.add_processor(render_processor)
+        self.world.add_processor(mouse_click_processor)
 
-        player = self.world.create_entity()
-        self.world.add_component(player, PositionComponent(x=0, y=0))
-        self.world.add_component(player, VelocityComponent(x=2, y=0))
-        tmp_img = Surface([20, 20])
-        tmp_img.fill((255, 0, 0))
-        self.world.add_component(player, SpriteComponent(image=tmp_img))
+        player = create_sprite_entity(self.world, player_preset)
+        self.world.add_component(player, VelocityComponent(x=2, y=1))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
@@ -47,8 +47,10 @@ class Game:
                 if event.type == pygame.KEYUP:
                     for hander in self.keyup_handlers[event.key]:
                         hander(event)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.world.create_entity(MouseClickComponent(*event.pos))
             self.world.process()
-            self.clock.tick(60)
+            self.clock.tick(40)
 
     def quit(self):
         self.running = False
