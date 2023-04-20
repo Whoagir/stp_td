@@ -3,6 +3,8 @@ from pygame import Surface, Rect
 from dataclasses import dataclass as component
 from dataclasses import field
 
+from stp_ecs.grid import Hexagon
+
 
 @component
 class PositionComponent:
@@ -42,3 +44,8 @@ class MouseClickComponent:
 @component
 class LayerComponent:
     layer: int = 0
+
+
+@component
+class HexagonComponent:
+    hexagon: Hexagon = None

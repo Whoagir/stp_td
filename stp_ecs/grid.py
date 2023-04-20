@@ -85,6 +85,35 @@ class Hexagon:
         return (abs(vec.q) + abs(vec.r) + abs(vec.s)) / 2
 
 
+def generate_hex_grid(grid_size: int) -> list[Hexagon]:
+    result = []
+    for q in range(-grid_size, grid_size + 1):
+        r1 = max(-grid_size, -q - grid_size)
+        r2 = min(grid_size, -q + grid_size)
+        for r in range(r1, r2 + 1):
+            result.append(Hexagon(q, r, -q - r))
+    return result
+
+
+def hex_to_pixel(grid_type: HexagonGridTypes,
+                 hexagon: Hexagon,
+                 hexagon_size: float) -> Tuple[float, float]:
+    x = (hexagon.q * HexToPixelMatrix[grid_type.value][0][0] +
+         hexagon.r * HexToPixelMatrix[grid_type.value][0][1]) * hexagon_size
+    y = (hexagon.q * HexToPixelMatrix[grid_type.value][1][0] +
+         hexagon.r * HexToPixelMatrix[grid_type.value][1][1]) * hexagon_size
+    return x, y
+
+
+def pixel_to_hex(grid_type: HexagonGridTypes,
+                 pos: Tuple[float, float],
+                 hexagon_size: float) -> Hexagon:
+    pt = (pos[0] / hexagon_size, pos[1] / hexagon_size)
+    q = pt[0] * PixelToHexMatrix[grid_type.value][0][0] + pt[1] * PixelToHexMatrix[grid_type.value][0][1]
+    r = pt[0] * PixelToHexMatrix[grid_type.value][1][0] + pt[1] * PixelToHexMatrix[grid_type.value][1][1]
+    return Hexagon(round(q), round(r), -round(q) - round(r))
+
+
 class HexagonGrid:
     def __init__(self, grid_type: HexagonGridTypes):
         self.type = grid_type
