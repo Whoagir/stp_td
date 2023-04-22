@@ -3,7 +3,8 @@ from pygame import Surface, Rect
 from dataclasses import dataclass as component
 from dataclasses import field
 
-from stp_ecs.grid import Hexagon
+from grid import Hexagon
+from constant import *
 
 
 @component
@@ -49,3 +50,23 @@ class LayerComponent:
 @component
 class HexagonComponent:
     hexagon: Hexagon = None
+
+
+@component
+class TakeEnemyDamageComponent:
+    damage: float = 0.0
+
+
+@component
+class EnemyEffectComponent:
+    effect: EnemyEffectType = EnemyEffectType.base
+
+
+@component
+class AlliesEffectComponent:
+    effect: AlliesEffectType = AlliesEffectType.base
+
+
+@component
+class HealthPointsComponent:
+    hp: int = 0

@@ -58,3 +58,14 @@ class RenderWithLayerProcessor(Processor):
             for i in range(5):
                 if layer.layer == i:
                     print('render sprite')
+
+
+class DamageHandlerProcessor(Processor):
+    def process(self):
+        for ent, (hp, damage) in self.world.get_components(HealthPointsComponent, TakeEnemyDamageComponent):
+            hp.hp -= damage.damage
+
+
+class EffectHandlerProcessor(Processor):
+    def process(self):
+        pass
