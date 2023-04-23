@@ -53,7 +53,22 @@ class HexagonComponent:
 
 
 @component
-class TakeEnemyDamageComponent:
+class EnemyComponent:
+    pass
+
+
+@component
+class TowerComponent:
+    pass
+
+
+@component
+class FlyEnemyComponent:
+    pass
+
+
+@component
+class TakeDamageComponent:
     damage: float = 0.0
 
 
@@ -69,4 +84,4 @@ class AlliesEffectComponent:
 
 @component
 class HealthPointsComponent:
-    hp: int = 0
+    value: int = 0

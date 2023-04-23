@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Tuple
-from math import cos, sin, pi
+from queue import Queue
 
 
 def lerp(a: float, b: float, t: float):
@@ -77,8 +77,14 @@ class Hexagon:
     def __eq__(self, other: 'Hexagon') -> bool:
         return self.q == other.q and self.r == other.r and self.s == other.s
 
+    def __hash__(self):
+        return hash((self.q, self.r, self.s))
+
     def __str__(self):
         return f'Hex(q={self.q}, r={self.r}, s={self.s})'
+
+    def __repr__(self):
+        return self.__str__()
 
     def distance_to(self, hexagon: 'Hexagon'):
         vec = self - hexagon
@@ -114,48 +120,45 @@ def pixel_to_hex(grid_type: HexagonGridTypes,
     return Hexagon(round(q), round(r), -round(q) - round(r))
 
 
-class HexagonGrid:
-    def __init__(self, grid_type: HexagonGridTypes):
-        self.type = grid_type
-        self.hexes = []
+def get_neighbors(hexagon: Hexagon) -> list[Hexagon]:
+    result = []
+    neighbors_pos = [[1, -1, 0], [1, 0, -1], [0, 1, -1], [-1, 1, 0], [-1, 0, 1], [0, -1, 1]]
+    for i in neighbors_pos:
+        result.append(hexagon + Hexagon(*i))
+    return result
 
-    @staticmethod
-    def generate_hex(grid_size: int) -> list[Hexagon]:
-        result = []
-        for q in range(-grid_size, grid_size + 1):
-            r1 = max(-grid_size, -q - grid_size)
-            r2 = min(grid_size, -q + grid_size)
-            for r in range(r1, r2 + 1):
-                result.append(Hexagon(q, r, -q - r))
-        return result
 
-    def hex_to_pixel(self, hexagon: Hexagon, hexagon_size: float) -> Tuple[float, float]:
-        x = (hexagon.q * HexToPixelMatrix[self.type.value][0][0] +
-             hexagon.r * HexToPixelMatrix[self.type.value][0][1]) * hexagon_size
-        y = (hexagon.q * HexToPixelMatrix[self.type.value][1][0] +
-             hexagon.r * HexToPixelMatrix[self.type.value][1][1]) * hexagon_size
-        return x, y
+def get_path(obstacles: list[Hexagon], start: Hexagon, end: Hexagon) -> list[Hexagon]:
+    frontier = Queue()
+    frontier.put(start)
+    came_from = dict()
+    came_from[start] = None
 
-    def pixel_to_hex(self, pos: Tuple[float, float], hexagon_size: float) -> Hexagon:
-        pt = (pos[0] / hexagon_size, pos[1] / hexagon_size)
-        q = pt[0] * PixelToHexMatrix[self.type.value][0][0] + pt[1] * PixelToHexMatrix[self.type.value][0][1]
-        r = pt[0] * PixelToHexMatrix[self.type.value][1][0] + pt[1] * PixelToHexMatrix[self.type.value][1][1]
-        return Hexagon(round(q), round(r), -round(q) - round(r))
+    while not frontier.empty():
+        current = frontier.get()
 
-    def get_hexagon_edges(self, hexagon: 'Hexagon', hexagon_size: float):
-        alpha = pi / 3
-        pos = self.hex_to_pixel(hexagon, hexagon_size)
-        for i in range(6):
-            yield ((pos[0] + hexagon_size * cos(i * alpha + alpha / 2),
-                    pos[1] + hexagon_size * sin(i * alpha + alpha / 2)),
-                   (pos[0] + hexagon_size * cos((i + 1) * alpha + alpha / 2),
-                    pos[1] + hexagon_size * sin((i + 1) * alpha + alpha / 2)))
+        if current == end:
+            break
+
+        for next in get_neighbors(current):
+            if next in obstacles:
+                continue
+            if next not in came_from:
+                frontier.put(next)
+                came_from[next] = current
+
+    q = []
+    e = end
+    while e is not None:
+        q.append(e)
+        e = came_from[e]
+    return q
 
 
 if __name__ == '__main__':
-    g = HexagonGrid(grid_type=HexagonGridTypes.flat_top)
-    g.generate_hex(grid_size=12)
-    h = g.hexes[0]
-    q = g.hex_to_pixel(h, 12)
-    w = g.pixel_to_hex(q, 12)
-    print(h, q, w)
+    q = Hexagon(0, 0, 0)
+    print(get_neighbors(q))
+    obstacles = [Hexagon(1, -1, 0), Hexagon(2, -1, -1), Hexagon(2, 0, -2), Hexagon(1, 1, -2), Hexagon(1, 1, -2), Hexagon(0, 2, -2)]
+    start = Hexagon(0, 0, 0)
+    end = Hexagon(3, 0, -3)
+    get_path(obstacles, start, end)

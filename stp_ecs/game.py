@@ -6,8 +6,8 @@ import pygame
 from systems import *
 from components import *
 from config import *
-from presets import player_preset
-from grid import HexagonGridTypes, generate_hex_grid, hex_to_pixel
+from presets import player_preset, green_floor_preset, red_floor_preset, purpul_floor_preset
+from grid import HexagonGridTypes, generate_hex_grid, hex_to_pixel, get_path
 
 
 class Game:
@@ -39,6 +39,26 @@ class Game:
                                        empty_floor_preset,
                                        pos=hex_to_pixel(HexagonGridTypes.pointy_top, h, 31))
             self.world.add_component(ent, HexagonComponent(hexagon=h))
+
+        obstacles = [Hexagon(1, -1, 0), Hexagon(2, -1, -1), Hexagon(2, 0, -2), Hexagon(1, 1, -2), Hexagon(1, 1, -2),
+                     Hexagon(0, 2, -2)]
+        start = Hexagon(0, 0, 0)
+        end = Hexagon(3, 0, -3)
+        offset = Hexagon(0, 3, -3)
+        for h in obstacles:
+            create_sprite_entity(self.world,
+                                 red_floor_preset,
+                                 pos=hex_to_pixel(HexagonGridTypes.pointy_top, h + offset, 31))
+        for h in get_path(obstacles, start, end):
+            create_sprite_entity(self.world,
+                                 green_floor_preset,
+                                 pos=hex_to_pixel(HexagonGridTypes.pointy_top, h + offset, 31))
+        create_sprite_entity(self.world,
+                             purpul_floor_preset,
+                             pos=hex_to_pixel(HexagonGridTypes.pointy_top, start + offset, 31))
+        create_sprite_entity(self.world,
+                             purpul_floor_preset,
+                             pos=hex_to_pixel(HexagonGridTypes.pointy_top, end + offset, 31))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)

@@ -19,3 +19,6 @@ def create_sprite_entity(world: World,
 
 player_preset = SpritePreset(ASSETS_DIR / 'images' / 'hex.png', scale_factor=(1, 1))
 empty_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'empty_floor.png', scale_factor=(1, 1), origin=(0, 0))
+red_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'red_floor.png', scale_factor=(1, 1))
+green_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'green_floor.png', scale_factor=(1, 1))
+purpul_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'purpul_floor.png', scale_factor=(1, 1))

@@ -62,8 +62,8 @@ class RenderWithLayerProcessor(Processor):
 
 class DamageHandlerProcessor(Processor):
     def process(self):
-        for ent, (hp, damage) in self.world.get_components(HealthPointsComponent, TakeEnemyDamageComponent):
-            hp.hp -= damage.damage
+        for ent, (hp, damage) in self.world.get_components(HealthPointsComponent, TakeDamageComponent):
+            hp.value -= damage.damage
 
 
 class EffectHandlerProcessor(Processor):
