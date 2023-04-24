@@ -22,3 +22,4 @@ empty_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'empty_floor.png', sca
 red_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'red_floor.png', scale_factor=(1, 1))
 green_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'green_floor.png', scale_factor=(1, 1))
 purpul_floor_preset = SpritePreset(ASSETS_DIR / 'images' / 'purpul_floor.png', scale_factor=(1, 1))
+enemy_preset = SpritePreset(ASSETS_DIR / 'images' / 'enemy.png', scale_factor=(1, 1))

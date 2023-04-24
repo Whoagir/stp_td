@@ -85,3 +85,8 @@ class AlliesEffectComponent:
 @component
 class HealthPointsComponent:
     value: int = 0
+
+
+@component
+class PathfindingComponent:
+    pass

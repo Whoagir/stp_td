@@ -6,7 +6,7 @@ import pygame
 from systems import *
 from components import *
 from config import *
-from presets import player_preset, green_floor_preset, red_floor_preset, purpul_floor_preset
+from presets import player_preset, green_floor_preset, red_floor_preset, purpul_floor_preset, enemy_preset
 from grid import HexagonGridTypes, generate_hex_grid, hex_to_pixel, get_path
 
 
@@ -59,6 +59,9 @@ class Game:
         create_sprite_entity(self.world,
                              purpul_floor_preset,
                              pos=hex_to_pixel(HexagonGridTypes.pointy_top, end + offset, 31))
+        create_sprite_entity(self.world,
+                             enemy_preset,
+                             pos=hex_to_pixel(HexagonGridTypes.pointy_top, start + offset, 31))
 
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
