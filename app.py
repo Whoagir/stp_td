@@ -63,7 +63,7 @@ class Game:
                     handler(event)
 
     def render(self):
-        self.screen.blit(back_surf,(0,0))
+        self.screen.blit(back_surf, (0, 0))
         self.grid.render(self.screen, self.dt)
         for obj in self.objects:
             obj.render(self.screen)

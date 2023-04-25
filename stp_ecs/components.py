@@ -70,6 +70,7 @@ class FlyEnemyComponent:
 @component
 class TakeDamageComponent:
     damage: float = 0.0
+    dtype : DamageType = DamageType.basic
 
 
 @component
@@ -90,3 +91,13 @@ class HealthPointsComponent:
 @component
 class PathfindingComponent:
     pass
+
+
+@component
+class TimeComponent:
+    time: float = 0
+
+
+@component
+class ArmorComponent:
+    armor = ArmorType.basic

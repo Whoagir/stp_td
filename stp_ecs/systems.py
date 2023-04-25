@@ -62,10 +62,20 @@ class RenderWithLayerProcessor(Processor):
 
 class DamageHandlerProcessor(Processor):
     def process(self):
-        for ent, (hp, damage) in self.world.get_components(HealthPointsComponent, TakeDamageComponent):
-            hp.value -= damage.damage
+        for ent, (hp, damage, armor,) in self.world.get_components(HealthPointsComponent, TakeDamageComponent, ArmorComponent):
+            if damage.dtype == DamageType.chaos:
+                hp.value -= damage.damage
 
 
 class EffectHandlerProcessor(Processor):
     def process(self):
         pass
+
+
+class TimeProcessor(Processor):
+    def process(self):
+        for ent, (time,) in self.world.get_components(TimeComponent):
+            # time.time +=
+            pass
+
+
